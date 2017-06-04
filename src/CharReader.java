@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class CharReader {
-	//鏁板瓧鍜屽瓧姣崭娇鐢ˋSCII镰佸垽鏂?
+	//使用ASCII码判断数字和字母
 	private String word;
 	private String input;
 	private char nowc;
@@ -28,24 +28,20 @@ public class CharReader {
 			int nextType = whatChar(nextc);
 			
 			if(nowType == nextType && nowType < 2){
+				//已经成为一个单词
 				continue;
 			}
-			else if(nowType < 2 && nextType == OPERATOR){
-				//阆囧埌杩愮畻绗︼紝鎴愬崟璇崭简
-				System.out.println(word);
-				word = "";
-			}
 			else if(nowType == OPERATOR && nextType < 2){
-				//寮€濮嫔啓鍏xpression镄勭鍙疯〃
+				//遇到运算符，修改本地域
 				System.out.println(word);
 				word = "";
 			}
 			else if(nextType == LINE && nowType < 2){
-				//灏唚ord鍐椤叆绗﹀佛琛ㄥ悗锛屾帴涓嬫潵镄勪綔鐢ㄥ烟鍒囨崲鍒拌祴链艰鍙?
+				//一行读写完毕，本地域改为最高级的
 				System.out.println("LINE: "+word);
 			}
 			else if(nextType == END && nowType < 2){
-				//璇诲彇瀹屾瘯
+				//读写完毕
 				System.out.println("END: "+word);
 			}
 			else if(nowType == ERROR || nextType == ERROR){
@@ -63,15 +59,15 @@ public class CharReader {
 	}
 	
 	public int whatChar(char c){
-		//鏁板瓧
+		//数字
 		if(c >= 48 && c <= 57){
 			return DIGITAL;
 		}
-		//澶у啓瀛楁瘝
+		//大写字母
 		else if(c >= 65 && c <= 90){
 			return LETTER;
 		}
-		//灏忓啓瀛楁瘝
+		//小写字母
 		else if(c >= 97 && c <= 122){
 			return LETTER;
 		}

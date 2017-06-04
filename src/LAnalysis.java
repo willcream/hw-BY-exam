@@ -15,7 +15,7 @@ public class LAnalysis {
 		
 	}
 	
-	//使用符号表内的值计算
+	//浣跨敤绗﹀佛琛ㄥ唴镄勫€艰绠?
 	public void calculate(String one,char oper,String two,String temp){
 		
 	}
