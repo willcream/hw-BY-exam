@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 /**
- * ·ûºÅ±í
+ * ç¬¦å·è¡¨
  * @author Will
  *
  */
@@ -33,7 +33,7 @@ class TableNode{
 	private String name;
 	private String type;
 	private float val;
-	private String room;//×÷ÓÃÓò
+	private String room;//ä½œç”¨åŸŸ
 	
 	
 	public TableNode(String name, String type, float val, String room) {

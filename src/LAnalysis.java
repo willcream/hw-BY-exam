@@ -15,7 +15,7 @@ public class LAnalysis {
 		
 	}
 	
-	//Ê¹ÓÃ·ûºÅ±íÄÚµÄÖµ¼ÆËã
+	//ä½¿ç”¨ç¬¦å·è¡¨å†…çš„å€¼è®¡ç®—
 	public void calculate(String one,char oper,String two,String temp){
 		
 	}

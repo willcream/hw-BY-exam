@@ -1,22 +1,22 @@
 import java.util.Scanner;
 
 public class CharReader {
-	//Êı×ÖºÍ×ÖÄ¸Ê¹ÓÃASCIIÂëÅĞ¶Ï
+	//éæ¿ç“§éœå±½ç“§å§£å´­å¨‡é¢Ë‹SCIIé•°ä½¸å½é‚?
 	private String word;
 	private String input;
 	private char nowc;
 	private TableStack stack;
 	
 	
-	private final int ERROR = 9;
-	private final int DIGITAL = 0;
-	private final int LETTER = 1;
-	private final int OPERATOR = 2;
-	private final int LINE = 3;
-	private final int END = 4;
+	public static final int ERROR = 9;
+	private static final int DIGITAL = 0;
+	private static final int LETTER = 1;
+	private static final int OPERATOR = 2;
+	private static final int LINE = 3;
+	public static final int END = 4;
 	
 	
-	//¶Á´Ê,ÎªÒÑ¾­È«²¿Æ´½ÓµÄ×Ö·û´®
+	//ç’‡æ˜ç˜,æ¶“å“„å‡¡ç¼å¿“åé–®ã„¦å«¾éºãƒ§æ®‘ç€›æ¥ƒîƒæ¶“?
 	public String readChar(String in){
 		int len = in.length();
 		word = "";
@@ -30,37 +30,48 @@ public class CharReader {
 			if(nowType == nextType && nowType < 2){
 				continue;
 			}
-			else if(nowType == OPERATOR){
-				//¿ªÊ¼Ğ´ÈëexpressionµÄ·ûºÅ±í
+			else if(nowType < 2 && nextType == OPERATOR){
+				//é˜†å›§åŸŒæ©æ„®ç•»ç»—ï¸¼ç´é´æ„¬å´Ÿç’‡å´­ç®€
+				System.out.println(word);
+				word = "";
+			}
+			else if(nowType == OPERATOR && nextType < 2){
+				//å¯®â‚¬æ¿®å«”å•“éî™«xpressioné•„å‹­îƒé™ç–¯ã€ƒ
+				System.out.println(word);
+				word = "";
 			}
 			else if(nextType == LINE && nowType < 2){
-				//½«wordĞ´Èë·ûºÅ±íºó£¬½ÓÏÂÀ´µÄ×÷ÓÃÓòÇĞ»»µ½¸³ÖµÓï¾ä
+				//çå”šordéæ¤¤å†ç»—ï¹€ä½›ç›ã„¥æ‚—é”›å±¾å¸´æ¶“å¬«æ½µé•„å‹ªç¶”é¢ã„¥çƒŸé’å›¨å´²é’æ‹Œç¥´é“¾è‰°î‡¢é™?
+				System.out.println("LINE: "+word);
 			}
 			else if(nextType == END && nowType < 2){
-				//¶ÁÈ¡Íê±Ï
+				//ç’‡è¯²å½‡ç€¹å±¾ç˜¯
+				System.out.println("END: "+word);
 			}
 			else if(nowType == ERROR || nextType == ERROR){
-				//±¨´í
+				//é¶ãƒ©æ•Š
+				System.out.println("é‘è™¹å¹‡æ¶“å¶…æ‚å¨‰æ—·æ®‘ç€›æ¥ƒîƒ");
 				break;
 			}
 			else{
-				//±¨´í
+				//é¶ãƒ©æ•Š
+				System.out.println("æ¶“å¶…æ‚å¨‰æ—·æ®‘é—æ›¡ç˜: "+word);
 				break;
 			}
 		}
 		return input;
 	}
 	
-	private int whatChar(char c){
-		//Êı×Ö
+	public int whatChar(char c){
+		//éæ¿ç“§
 		if(c >= 48 && c <= 57){
 			return DIGITAL;
 		}
-		//´óĞ´×ÖÄ¸
+		//æ¾¶Ñƒå•“ç€›æ¥ç˜
 		else if(c >= 65 && c <= 90){
 			return LETTER;
 		}
-		//Ğ¡Ğ´×ÖÄ¸
+		//çå¿“å•“ç€›æ¥ç˜
 		else if(c >= 97 && c <= 122){
 			return LETTER;
 		}
@@ -69,7 +80,8 @@ public class CharReader {
 				c == '*' ||
 				c == '/' ||
 				c == '(' ||
-				c == ')'){
+				c == ')' ||
+				c == '='){
 			return OPERATOR;
 		}
 		else if(c == ';'){

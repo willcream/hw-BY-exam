@@ -5,7 +5,9 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		String input = new String();
-		if(args == null){
+		CharReader charReader = new CharReader();
+		
+		if(args == null || args.length == 0){
 			Scanner scan = new Scanner(System.in);
 			int len;
 			do{
@@ -16,25 +18,18 @@ public class Main {
 			input = args[0];
 		}
 		int len = input.length();
+		
 		for(int i = 0; i < len; i++){
 			char c = input.charAt(i);
-			if(
-					(c >= 48 && c <= 57) ||
-					(c >= 65 && c <= 90)||
-					(c >= 97 && c <= 122)){
-				continue;
-			}
-			else if(
-					c == '(' ||
-					c == ')' ||
-					c == ';' ){
-				continue;
-			}
-			else{
-				System.out.println("ÊäÈëÓÐÎó");
-				break;
+			int res = charReader.whatChar(c);
+			if(res == charReader.ERROR){
+				System.out.println("è¾“å…¥æœ‰è¯¯");
 			}
 		}
+		charReader.readChar(input);
+		
+		input = input.substring(0, --len);
+		System.out.println("\nè¾“å…¥çš„ä¸²\n"+input);
 		
 	}
 
