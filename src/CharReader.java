@@ -6,6 +6,7 @@ public class CharReader {
 	private String input;
 	private char nowc;
 	private TableStack stack;
+	private String localDomain;
 	
 	
 	public static final int ERROR = 9;
@@ -15,8 +16,12 @@ public class CharReader {
 	private static final int LINE = 3;
 	public static final int END = 4;
 	
+	public CharReader(TableStack stack){
+		this.stack = stack;
+		localDomain = TableStack.EVAL;
+	}
 	
-	//璇昏瘝,涓哄凡缁忓叏閮ㄦ嫾鎺ョ殑瀛楃涓?
+	//词法分析
 	public String readChar(String in){
 		int len = in.length();
 		word = "";
@@ -28,8 +33,17 @@ public class CharReader {
 			int nextType = whatChar(nextc);
 			
 			if(nowType == nextType && nowType < 2){
-				//已经成为一个单词
+				//还没成为一个单词
 				continue;
+			}
+			else if(nowType < 2 && nextType >= 2){
+				//刚好成为一个单词,开始写入符号表
+				System.out.println(word);
+				
+				if(nowType == DIGITAL){
+					stack.pushNode(word,TableStack.DIGITAL, Integer.parseInt(word), localDomain);
+				}
+				word = "";
 			}
 			else if(nowType == OPERATOR && nextType < 2){
 				//遇到运算符，修改本地域
@@ -44,14 +58,9 @@ public class CharReader {
 				//读写完毕
 				System.out.println("END: "+word);
 			}
-			else if(nowType == ERROR || nextType == ERROR){
-				//鎶ラ敊
-				System.out.println("鍑虹幇涓嶅悎娉旷殑瀛楃");
-				break;
-			}
 			else{
-				//鎶ラ敊
-				System.out.println("涓嶅悎娉旷殑鍗曡瘝: "+word);
+				//未知问题
+				System.out.println("未知问题: "+word);
 				break;
 			}
 		}

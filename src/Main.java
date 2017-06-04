@@ -5,7 +5,8 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		String input = new String();
-		CharReader charReader = new CharReader();
+		TableStack stack = new TableStack();
+		CharReader charReader = new CharReader(stack);
 		
 		if(args == null || args.length == 0){
 			Scanner scan = new Scanner(System.in);
