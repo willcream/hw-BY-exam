@@ -6,26 +6,43 @@ import java.util.ArrayList;
  *
  */
 public class TableStack {
+	private ArrayList<TableNode> stack; 
+	
+	
 	public static final String DIGITAL="digital";
 	public static final String SYMBOL="symbol";
+	public static final String OPER="operator";
+	public static final String L="line";
+	public static final String E="end";
+	public static final String EVAL="evaluate";
+	public static final String EXPR="expression";
+	public static final String TERM="term";
+	public static final String FACTOR="factor";
 	
-	
-	ArrayList<TableNode> stack; 
+	public TableStack(){
+		stack = new ArrayList<>();
+	}
 	
 	public void pushNode(String name,String type,float val,String room){
-		
+		TableNode tn = new TableNode(name,type,val,room);
+		stack.add(tn);
+		System.out.println("--> ["+name+", "+type+", "+val+", "+room+"]");
 	}
 	
 	public TableNode topNode(){
-		return null;
+		int len = stack.size();
+		return stack.get(len-1);
 	}
 	
 	public TableNode pop(){
-		return null;
+		int len = stack.size();
+		return stack.remove(len-1);
 	}
 	
 	public void editTop(String name,String type,float val,String room){
-		
+		pop();
+		TableNode tn = new TableNode(name,type,val,room);
+		stack.add(tn);
 	}
 }
 
@@ -37,7 +54,6 @@ class TableNode{
 	
 	
 	public TableNode(String name, String type, float val, String room) {
-		super();
 		this.name = name;
 		this.type = type;
 		this.val = val;
