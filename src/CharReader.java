@@ -16,7 +16,7 @@ public class CharReader {
 	public static final int END = 4;
 	
 	
-	//璇昏瘝,涓哄凡缁忓叏閮ㄦ嫾鎺ョ殑瀛楃涓?
+	//读写单词
 	public String readChar(String in){
 		int len = in.length();
 		word = "";
@@ -44,14 +44,9 @@ public class CharReader {
 				//读写完毕
 				System.out.println("END: "+word);
 			}
-			else if(nowType == ERROR || nextType == ERROR){
-				//鎶ラ敊
-				System.out.println("鍑虹幇涓嶅悎娉旷殑瀛楃");
-				break;
-			}
 			else{
-				//鎶ラ敊
-				System.out.println("涓嶅悎娉旷殑鍗曡瘝: "+word);
+				//未知问题
+				System.out.println("未知问题: "+word);
 				break;
 			}
 		}
