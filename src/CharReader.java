@@ -23,7 +23,6 @@ public class CharReader {
 	
 
 	//读写单词
-
 	//词法分析
 
 	public String readChar(String in){
@@ -47,6 +46,9 @@ public class CharReader {
 				if(nowType == DIGITAL){
 					stack.pushNode(word,TableStack.DIGITAL, Integer.parseInt(word), localDomain);
 				}
+				else if(nowType == LETTER){
+					stack.pushNode(word, TableStack.SYMBOL, 0, localDomain);
+				}
 				word = "";
 			}
 			else if(nowType == OPERATOR && nextType < 2){
@@ -58,13 +60,16 @@ public class CharReader {
 				//一行读写完毕，本地域改为最高级的
 				System.out.println("LINE: "+word);
 			}
+			else if(nowType == LINE && nextType != ERROR){
+				word = "";
+			}
 			else if(nextType == END && nowType < 2){
 				//读写完毕
 				System.out.println("END: "+word);
 			}
 			else{
 				//未知问题
-				System.out.println("未知问题: "+word);
+				System.out.println("未知问题: "+word+nextc);
 				break;
 			}
 		}

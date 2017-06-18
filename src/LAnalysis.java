@@ -1,5 +1,18 @@
 
+/**
+ * 语法分析器，LR分析法
+ * 构造的Action表和GOTO表仅仅针对本次文法
+ * @author Administrator
+ *
+ */
 public class LAnalysis {
+	
+	
+	public LAnalysis(){
+		//Initialize
+	}
+	
+	
 	//expression
 	public void e(){
 		
@@ -15,8 +28,9 @@ public class LAnalysis {
 		
 	}
 	
-	//通过符号表内的值来计算
-	public void calculate(String one,char oper,String two,String temp){
+	
+	
+	private void initialize(){
 		
 	}
 }
