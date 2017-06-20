@@ -5,8 +5,10 @@ public class CharReader {
 	private String word;
 	private String input;
 	private char nowc;
-	private TableStack stack;
 	private String localDomain;
+	
+	private TableStack stack;
+	private OperQueue queue;
 	
 	
 	public static final int ERROR = 9;
@@ -19,12 +21,12 @@ public class CharReader {
 	public CharReader(TableStack stack){
 		this.stack = stack;
 		localDomain = TableStack.EVAL;
+		queue = new OperQueue();
 	}
 	
 
 	//读写单词
-	//词法分析
-
+	//词法分析，分析整个句子的词法。
 	public String readChar(String in){
 		int len = in.length();
 		word = "";
@@ -76,6 +78,55 @@ public class CharReader {
 		return input;
 	}
 	
+	
+	/**
+	 * 读取字符串，将其简化便于算符优先关系运算。
+	 * @param in
+	 */
+	public void read4Queue(String in){
+		int len = in.length();
+		word = "";
+		for(int i = 0; i < len-1; i++){
+			nowc = in.charAt(i);
+			word += nowc;
+			char nextc = in.charAt(i+1);
+			int nowType = whatChar(nowc);
+			int nextType = whatChar(nextc);
+			
+			if(nowType == nextType && nowType < 2){
+				//还没成为一个单词
+				continue;
+			}
+			else if(nowType < 2 && nextType >= 2){
+				//刚好成为一个单词,开始写入算符队列
+//				System.out.println(word);
+				queue.in('a');
+				word = "";
+			}
+			else if(nowType == OPERATOR){
+				//遇到运算符
+//				System.out.println("oper--"+nowc);
+				queue.in(nowc);
+				word = "";
+			}
+			else{
+				//TODO 错误检查
+				System.out.println("未知问题"+word+nextc);
+				break;
+			}
+			
+			if(nextType == END){
+				queue.in(nextc);
+//				System.out.println(nextc);
+				break;
+			}
+		}
+		
+		queue.print();
+	}
+	
+	
+		
 	public int whatChar(char c){
 		//数字
 		if(c >= 48 && c <= 57){

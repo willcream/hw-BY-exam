@@ -18,6 +18,7 @@ public class Main {
 		}else{
 			input = args[0];
 		}
+		input += '#';
 		int len = input.length();
 		
 		for(int i = 0; i < len; i++){
@@ -27,7 +28,8 @@ public class Main {
 				System.out.println("输入有误");
 			}
 		}
-		charReader.readChar(input);
+//		charReader.read4Queue(input);
+
 		
 		input = input.substring(0, --len);
 		System.out.println("\n输入的串\n"+input);
