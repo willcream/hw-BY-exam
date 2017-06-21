@@ -42,6 +42,7 @@ public class LAnalysis {
 		boolean isEqualExist = false;
 		
 		if(queue.size() <= 2){
+//			System.out.println("没有赋值语句！");
 			ErrorHelper.grammerError("整句", ErrorHelper.NO_EVALUATE, lineNum);
 			return false;
 		}

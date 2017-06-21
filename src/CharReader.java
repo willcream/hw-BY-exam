@@ -147,8 +147,10 @@ public class CharReader {
 				lineNum++;
 				queue.in('#',30,word,0);
 				word = "";
-				queueList.add(queue);
-				queue = new OperQueue(details);
+				if(nextc != '#'){
+					queueList.add(queue);
+					queue = new OperQueue(details);
+				}
 			}
 			else{
 				ErrorHelper.wordError(word+nextc, ErrorHelper.OTHER, lineNum);

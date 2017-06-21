@@ -53,8 +53,7 @@ public class Main {
 			System.err.println(e.getMessage());
 		}
 		
-	
-		charReader.read4Queue(input);
+		queueList = charReader.read4Queue(input);
 		int lineNum = 1;boolean istrue = false;
 		for(OperQueue queue : queueList){
 			LAnalysis any = new LAnalysis(queue);
@@ -65,10 +64,9 @@ public class Main {
 			lineNum++;
 		}
 		
+		queueList = charReader.read4Queue(input);
 		charReader.printSortCode();
 		
-		if(queueList.size() == 0)
-			queueList = charReader.read4Queue(input);
 		Calculator cal = new Calculator(queueList
 				);
 		cal.calculate();
