@@ -33,4 +33,16 @@ public class OperQueue {
 			System.out.println(c);
 		}
 	}
+	
+	/**
+	 * 获取对首但不移除
+	 * @return 对首
+	 */
+	public char head(){
+		return queue.get(0);
+	}
+	
+	public int size(){
+		return queue.size();
+	}
 }

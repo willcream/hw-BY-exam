@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class CharReader {
@@ -8,7 +10,7 @@ public class CharReader {
 	private String localDomain;
 	
 	private TableStack stack;
-	private OperQueue queue;
+	private List<OperQueue> queueList;
 	
 	
 	public static final int ERROR = 9;
@@ -18,16 +20,17 @@ public class CharReader {
 	private static final int LINE = 3;
 	public static final int END = 4;
 	
-	public CharReader(TableStack stack){
+	public CharReader(TableStack stack, List<OperQueue> queueList){
 		this.stack = stack;
 		localDomain = TableStack.EVAL;
-		queue = new OperQueue();
+		this.queueList = queueList;
 	}
 	
 
 	//读写单词
 	//词法分析，分析整个句子的词法。
-	public String readChar(String in){
+	public List<String> readChar(String in){
+		List<String> lines = new ArrayList<>();
 		int len = in.length();
 		word = "";
 		for(int i = 0; i < len-1; i++){
@@ -61,8 +64,6 @@ public class CharReader {
 			else if(nextType == LINE && nowType < 2){
 				//一行读写完毕，本地域改为最高级的
 				System.out.println("LINE: "+word);
-			}
-			else if(nowType == LINE && nextType != ERROR){
 				word = "";
 			}
 			else if(nextType == END && nowType < 2){
@@ -75,7 +76,7 @@ public class CharReader {
 				break;
 			}
 		}
-		return input;
+		return lines;
 	}
 	
 	
@@ -84,6 +85,7 @@ public class CharReader {
 	 * @param in
 	 */
 	public void read4Queue(String in){
+		OperQueue queue = new OperQueue();
 		int len = in.length();
 		word = "";
 		for(int i = 0; i < len-1; i++){
@@ -109,6 +111,14 @@ public class CharReader {
 				queue.in(nowc);
 				word = "";
 			}
+			//TODO 未能正确处理不同行的问题。未能处理等于号的问题
+			else if(nowType == LINE){
+				word = "";
+				queue.in('#');
+				queueList.add(queue);
+				queue = new OperQueue();
+				continue;
+			}
 			else{
 				//TODO 错误检查
 				System.out.println("未知问题"+word+nextc);
@@ -118,11 +128,11 @@ public class CharReader {
 			if(nextType == END){
 				queue.in(nextc);
 //				System.out.println(nextc);
+				queueList.add(queue);
 				break;
 			}
 		}
 		
-		queue.print();
 	}
 	
 	
