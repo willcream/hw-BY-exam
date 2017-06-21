@@ -13,6 +13,8 @@ public class CharReader {
 	private List<OperQueue> queueList;
 	private List<DetailNode> details;
 	
+	private int lineNum = 1;
+	
 	
 	public static final int ERROR = 9;
 	private static final int DIGITAL = 0;
@@ -87,6 +89,7 @@ public class CharReader {
 	 * @param in
 	 */
 	public List<OperQueue> read4Queue(String in){
+		queueList = new ArrayList<>();
 		OperQueue queue = new OperQueue(details);
 		int len = in.length();
 		word = "";
@@ -132,30 +135,28 @@ public class CharReader {
 					//正确
 				}
 				else{
-					System.out.println("这两个运算符不能连续使用："+nowc+nextc);
+					ErrorHelper.wordError(word+nextc, ErrorHelper.TWO_OPERATOR, lineNum);
 					return null;
 				}
 				int typeCode = DetailNode.getTypeCode(nowc);
 				queue.in(nowc,typeCode,nowc+"");
 				word = "";
 			}
-			//TODO 未能正确处理不同行的问题。未能处理等于号的问题
 			else if(nowType == LINE){
-				
+				//一行结束
+				lineNum++;
 				queue.in('#',30,word,0);
 				word = "";
 				queueList.add(queue);
 				queue = new OperQueue(details);
 			}
 			else{
-				//TODO 错误检查
-				System.out.println("词法分析---未知问题"+word+nextc);
+				ErrorHelper.wordError(word+nextc, ErrorHelper.OTHER, lineNum);
 				break;
 			}
 			
 			if(nextType == END){
 				queue.in(nextc,30,nextc+"",0);
-//				System.out.println(nextc);
 				queueList.add(queue);
 				break;
 			}
@@ -163,6 +164,15 @@ public class CharReader {
 		return queueList;
 	}
 	
+	/**
+	 * 打印种别码
+	 */
+	public void printSortCode(){
+		System.out.println("变量\t|\t种别码\t|\t值");
+		for(OperQueue queue : queueList){
+			queue.sortCode();
+		}
+	}
 	
 		
 	public int whatChar(char c){

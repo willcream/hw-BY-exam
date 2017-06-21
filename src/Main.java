@@ -1,3 +1,8 @@
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -25,7 +30,7 @@ public class Main {
 		else{
 			input = args[0];
 		}
-		input += '#';
+//		input += '#';
 		int len = input.length();
 		
 		for(int i = 0; i < len; i++){
@@ -37,25 +42,38 @@ public class Main {
 		}
 		
 		
-		List<OperQueue> operList = charReader.read4Queue(input);
-		int i = 1;boolean istrue = false;
-//		for(OperQueue queue : queueList){
-//			System.out.println("第"+i+"行：");
-//			queue.print();
-//			LAnalysis any = new LAnalysis(queue);
-//			istrue = any.analysize();
-//			if(!istrue){
-//				System.err.println(-1);
-//			}
-//			i++;
-//		}
+		//清空yyy.txt
+		File file = new File("yyy.txt");
+		FileOutputStream fos = null;
+		try{
+			fos = new FileOutputStream(file);
+			String empty = "";
+			fos.write(empty.getBytes());
+		}catch(Exception e){
+			System.err.println(e.getMessage());
+		}
 		
-		Calculator cal = new Calculator(operList);
+	
+		charReader.read4Queue(input);
+		int lineNum = 1;boolean istrue = false;
+		for(OperQueue queue : queueList){
+			LAnalysis any = new LAnalysis(queue);
+			istrue = any.analysize(lineNum);
+			if(!istrue){
+				System.err.println(-1);
+			}
+			lineNum++;
+		}
+		
+		charReader.printSortCode();
+		
+		if(queueList.size() == 0)
+			queueList = charReader.read4Queue(input);
+		Calculator cal = new Calculator(queueList
+				);
 		cal.calculate();
 		
-
-		
-//		input = input.substring(0, --len);
+		System.out.println("\n==========结束===========\n");
 //		System.out.println("\n输入的串\n"+input);
 		
 	}

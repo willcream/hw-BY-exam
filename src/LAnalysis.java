@@ -33,8 +33,8 @@ public class LAnalysis {
 	}
 
 
-	//分析函数
-	public boolean analysize(){
+	//分析函数，只能分析一行
+	public boolean analysize(int lineNum){
 		int flag = 0;
 		char top='%';
 		char nowc='%';
@@ -42,7 +42,7 @@ public class LAnalysis {
 		boolean isEqualExist = false;
 		
 		if(queue.size() <= 2){
-			System.out.println("没有赋值语句");
+			ErrorHelper.grammerError("整句", ErrorHelper.NO_EVALUATE, lineNum);
 			return false;
 		}
 		
@@ -52,7 +52,7 @@ public class LAnalysis {
 			int len = queue.size();
 			
 			if(nowc != '=' && num == 1){
-				System.out.println("没有赋值语句");
+				ErrorHelper.grammerError("整句", ErrorHelper.NO_EVALUATE, lineNum);
 				return false;
 			}
 			
@@ -60,6 +60,7 @@ public class LAnalysis {
 				if(isEqualExist){
 					flag = -1;
 					System.out.println("一个赋值语句不能有两个等于号");
+					ErrorHelper.grammerError("整句", ErrorHelper.TWO_EQUAL, lineNum);
 					break;
 				}
 				else{
@@ -71,7 +72,7 @@ public class LAnalysis {
 			int judge = judge(top, nowc);
 			if(judge == -1 || judge == 0){
 				if(top == '#' && nowc == '#'){
-					System.out.println("语法正确");
+//					System.out.println("语法正确");
 					return true;
 				}
 				
@@ -84,15 +85,15 @@ public class LAnalysis {
 				reduction();
 			}
 			else{
-				//TODO 有不属于该文法的情况出现
 				System.out.println("不属于该文法，出错处： "+top+nowc);
+				ErrorHelper.grammerError(top+""+nowc, ErrorHelper.WRONG_GRAMMER, lineNum);
 				flag = -1;
 				break;
 			}
 			num++;
 		}while(queue.size() != 0);
 		if(flag != -1)
-			System.out.println("算符优先文法不明错误:"+top+nowc);
+			ErrorHelper.grammerError(top+""+nowc, ErrorHelper.OTHER, lineNum);
 		return false;
 	}
 

@@ -1,3 +1,7 @@
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.List;
 
 /**
@@ -15,6 +19,7 @@ public class Calculator {
 	
 	private List<OperQueue> operList;
 	private int flag=1; //标识是否有错误，flag为1正确，为0错误。
+	private int lineNum = 1;
 
 	//不断替换的变量
 	private char ch;
@@ -47,11 +52,13 @@ public class Calculator {
 			ch = on.alias;
 			genOn = on;
 			v();
-			if(ch == '#'){
+			
+			String tempName = on.name;
+			if(tempName.equals('#'+"")){
 				//success
 				break;
 			}
-			
+			lineNum++;
 		}
 	}
 
@@ -128,7 +135,6 @@ public class Calculator {
 	}
 
 	private float gen(char oper,float place1,float place2,float temp){
-		//		temp = e1_place+oper+e2_place;
 		switch(oper){
 		case '+':
 			temp = place1 + place2;
@@ -141,9 +147,11 @@ public class Calculator {
 			break;
 		case '/':
 			try{
+				if(place2 == 0){
+					ErrorHelper.calculateError("整句", ErrorHelper.DIVIDE_0, lineNum);
+				}
 				temp = place1 / place2;
 			}catch(ArithmeticException e){
-				System.out.println("有为0的除数");
 				e.printStackTrace();
 			}
 			break;
@@ -155,7 +163,20 @@ public class Calculator {
 			System.err.println("未知运算规则： "+oper);
 		}
 
-		System.out.println("("+oper+" , "+place1+" , "+place2+" , "+temp+')');
+		//将四元组写入文件
+		File file = new File("yyy.txt");
+		FileOutputStream fos = null;
+		BufferedOutputStream bos = null;
+		try{
+			fos = new FileOutputStream(file,true);
+			String s = "("+oper+" , "+place1+" , "+place2+" , "+temp+')'+'\n';
+			bos = new BufferedOutputStream(fos);
+			bos.write(s.getBytes());
+			bos.flush();
+		}catch(Exception e){
+			System.err.println(e.getMessage());
+		}
+//		System.out.println("("+oper+" , "+place1+" , "+place2+" , "+temp+')');
 
 		return temp;
 	}

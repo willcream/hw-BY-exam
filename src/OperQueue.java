@@ -78,6 +78,17 @@ public class OperQueue {
 			System.out.println(c);
 		}
 	}
+	
+	public void sortCode(){
+		for (OperNode on : queue){
+			char c = on.alias;
+			int code = DetailNode.getTypeCode(c);
+			if(c == 'a')
+				System.out.println(on.name+"\t\t"+"("+code+"\t,\t"+getDetail(on.name).getVal()+")");
+			else
+				System.out.println(on.name+"\t\t"+"("+code+"\t,\t"+on.name+")");
+		}
+	}
 
 	/**
 	 * 获取对首但不移除
