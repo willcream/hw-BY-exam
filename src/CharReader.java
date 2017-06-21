@@ -11,6 +11,7 @@ public class CharReader {
 	
 	private TableStack stack;
 	private List<OperQueue> queueList;
+	private List<DetailNode> details;
 	
 	
 	public static final int ERROR = 9;
@@ -20,10 +21,11 @@ public class CharReader {
 	private static final int LINE = 3;
 	public static final int END = 4;
 	
-	public CharReader(TableStack stack, List<OperQueue> queueList){
+	public CharReader(TableStack stack, List<OperQueue> queueList, List<DetailNode> details){
 		this.stack = stack;
 		localDomain = TableStack.EVAL;
 		this.queueList = queueList;
+		this.details = details;
 	}
 	
 
@@ -84,8 +86,8 @@ public class CharReader {
 	 * 读取字符串，将其简化便于算符优先关系运算。
 	 * @param in
 	 */
-	public void read4Queue(String in){
-		OperQueue queue = new OperQueue();
+	public List<OperQueue> read4Queue(String in){
+		OperQueue queue = new OperQueue(details);
 		int len = in.length();
 		word = "";
 		for(int i = 0; i < len-1; i++){
@@ -101,38 +103,64 @@ public class CharReader {
 			}
 			else if(nowType < 2 && nextType >= 2){
 				//刚好成为一个单词,开始写入算符队列
-//				System.out.println(word);
-				queue.in('a');
+				if(nowType == LETTER)
+					queue.in('a',20, word);
+				else{
+					//此时是数字
+					queue.in('a',20, word, Float.parseFloat(word));
+				}
+					
 				word = "";
 			}
 			else if(nowType == OPERATOR){
 				//遇到运算符
-//				System.out.println("oper--"+nowc);
-				queue.in(nowc);
+				if(nowc == ')' 
+						&& (
+								nextc == '+' 
+								|| nextc == '-' 
+								|| nextc == '*' 
+								|| nextc == '/'
+								|| nextc == ';'
+								|| nextc == '#'
+								|| nextc == ')')){
+					//正确
+				}
+				else if(nextc == '('){
+					//正确
+				}
+				else if(nextType == DIGITAL || nextType == LETTER){
+					//正确
+				}
+				else{
+					System.out.println("这两个运算符不能连续使用："+nowc+nextc);
+					return null;
+				}
+				int typeCode = DetailNode.getTypeCode(nowc);
+				queue.in(nowc,typeCode,nowc+"");
 				word = "";
 			}
 			//TODO 未能正确处理不同行的问题。未能处理等于号的问题
 			else if(nowType == LINE){
+				
+				queue.in('#',30,word,0);
 				word = "";
-				queue.in('#');
 				queueList.add(queue);
-				queue = new OperQueue();
-				continue;
+				queue = new OperQueue(details);
 			}
 			else{
 				//TODO 错误检查
-				System.out.println("未知问题"+word+nextc);
+				System.out.println("词法分析---未知问题"+word+nextc);
 				break;
 			}
 			
 			if(nextType == END){
-				queue.in(nextc);
+				queue.in(nextc,30,nextc+"",0);
 //				System.out.println(nextc);
 				queueList.add(queue);
 				break;
 			}
 		}
-		
+		return queueList;
 	}
 	
 	

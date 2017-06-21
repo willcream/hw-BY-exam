@@ -38,10 +38,35 @@ public class LAnalysis {
 		int flag = 0;
 		char top='%';
 		char nowc='%';
+		int num = 0;//记录已处理的字符数量
+		boolean isEqualExist = false;
+		
+		if(queue.size() <= 2){
+			System.out.println("没有赋值语句");
+			return false;
+		}
+		
 		do{
 			top = stack.peek();
 			nowc = queue.head();
 			int len = queue.size();
+			
+			if(nowc != '=' && num == 1){
+				System.out.println("没有赋值语句");
+				return false;
+			}
+			
+			if(nowc == '=' ){
+				if(isEqualExist){
+					flag = -1;
+					System.out.println("一个赋值语句不能有两个等于号");
+					break;
+				}
+				else{
+					isEqualExist = true;
+				}
+			}
+			
 			
 			int judge = judge(top, nowc);
 			if(judge == -1 || judge == 0){
@@ -64,6 +89,7 @@ public class LAnalysis {
 				flag = -1;
 				break;
 			}
+			num++;
 		}while(queue.size() != 0);
 		if(flag != -1)
 			System.out.println("算符优先文法不明错误:"+top+nowc);
